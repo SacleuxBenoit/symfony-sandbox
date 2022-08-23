@@ -25,6 +25,9 @@ class Livre
     #[ORM\Column(length: 190, nullable: true)]
     private ?string $code_isbn = null;
 
+    #[ORM\ManyToOne(inversedBy: 'livres')]
+    private ?Auteur $auteur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Livre
     public function setCodeIsbn(?string $code_isbn): self
     {
         $this->code_isbn = $code_isbn;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?Auteur
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?Auteur $auteur): self
+    {
+        $this->auteur = $auteur;
 
         return $this;
     }
