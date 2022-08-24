@@ -23,6 +23,9 @@ class Emprunt
     #[ORM\ManyToOne(inversedBy: 'emprunts')]
     private ?Livre $livre = null;
 
+    #[ORM\ManyToOne(inversedBy: 'emprunts')]
+    private ?Emprunteur $emprunteur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Emprunt
     public function setLivre(?Livre $livre): self
     {
         $this->livre = $livre;
+
+        return $this;
+    }
+
+    public function getEmprunteur(): ?Emprunteur
+    {
+        return $this->emprunteur;
+    }
+
+    public function setEmprunteur(?Emprunteur $emprunteur): self
+    {
+        $this->emprunteur = $emprunteur;
 
         return $this;
     }
