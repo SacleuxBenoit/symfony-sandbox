@@ -6,14 +6,13 @@ use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-
+use Faker\Factory as FakerFactory;
 class TestFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-
+        $faker = FakerFactory::create("fr_FR");
+        $this->loadUsers($manager, $faker);
         $manager->flush();
     }
 
@@ -60,7 +59,7 @@ class TestFixtures extends Fixture
         foreach ($userDatas as $userData){
             $user = new User();
             $user->setEmail($userData['email']);
-            $user->setEmail($userData["roles"]);
+            $user->setRoles($userData["roles"]);
             $user->setPassword($userData['password']);
             $user->setEnabled($userData['enabled']);
             $user->setCreatedAt($userData['created_at']);
