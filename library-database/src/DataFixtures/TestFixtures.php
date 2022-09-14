@@ -2,8 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Emprunteur;
 use App\Entity\User;
 use DateTimeImmutable;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
@@ -11,10 +13,16 @@ use Faker\Generator as FakerGenerator;
 
 class TestFixtures extends Fixture
 {
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+    
     public function load(ObjectManager $manager): void
     {
         $faker = FakerFactory::create("fr_FR");
         $this->loadUsers($manager, $faker);
+        $this->laodEmprunteur($manager, $faker);
         $manager->flush();
     }
 
@@ -86,6 +94,54 @@ class TestFixtures extends Fixture
             $user->setUpdatedAt($date);
 
             $manager->persist($user);
+        }
+    }
+
+    public function laodEmprunteur(ObjectManager $manager): void{
+        $repository = $this->doctrine->getRepository(User::class);
+        $users = $repository->findAll();
+
+        $emprunteurDatas = [
+            [
+                "nom" => "foo",
+                "prenom" => "foo",
+                "tel" => "123456789",
+                "actif" => true,
+                "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-01-01 10:00:00'),
+                "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-01-01 10:00:00'),
+                "user_id" => $users[1]
+            ],
+            [
+                "nom" => "bar",
+                "prenom" => "bar",
+                "tel" => "123456789",
+                "actif" => false,
+                "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-02-01 11:00:00'),
+                "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-05-01 12:00:00'),
+                "user_id" => $users[2]
+            ],
+            [
+                "nom" => "foo",
+                "prenom" => "foo",
+                "tel" => "123456789",
+                "actif" => true,
+                "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-03-01 12:00:00'),
+                "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-03-01 12:00:00'),
+                "user_id" => $users[3]
+            ]
+        ];
+
+        foreach($emprunteurDatas as $emprunteurData){
+            $emprunteur = new Emprunteur();
+            $emprunteur->setNom($emprunteurData["nom"]);
+            $emprunteur->setPrenom($emprunteurData["prenom"]);
+            $emprunteur->setTel($emprunteurData["tel"]);
+            $emprunteur->setActif($emprunteurData["actif"]);
+            $emprunteur->setCreatedAt($emprunteurData["created_at"]);
+            $emprunteur->setUpdatedAt($emprunteurData["updated_at"]);
+            $emprunteur->setUser($emprunteurData["user_id"]);
+
+            $manager->persist($emprunteur);
         }
     }
 }
