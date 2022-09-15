@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Emprunt;
 use App\Entity\Livre;
 use App\Entity\Genre;
 use App\Entity\Emprunteur;
@@ -24,9 +25,10 @@ class TestFixtures extends Fixture
     {
         $faker = FakerFactory::create("fr_FR");
         $this->loadUsers($manager, $faker);
-        $this->loadEmprunteur($manager, $faker);
         $this->loadLivre($manager, $faker);
         $this->loadGenre($manager, $faker);
+        $this->loadEmprunteur($manager, $faker);
+        $this->loadEmprunt($manager, $faker);
         $manager->flush();
     }
 
@@ -288,6 +290,33 @@ class TestFixtures extends Fixture
             $emprunteur->setUpdatedAt($date);
 
             $manager->persist($emprunteur);
+        }
+    }
+
+    function loadEmprunt(ObjectManager $manager, FakerGenerator $faker): void
+    {
+        $empruntDatas = [
+            [
+                "date_emprunt" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2020-02-01 10:00:00"),
+                "date_retour" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2020-03-01 10:00:00"),
+            ],
+            [
+                "date_emprunt" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2020-03-01 10:00:00"),
+                "date_retour" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2020-04-01 10:00:00"),
+            ],
+            [
+                "date_emprunt" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2020-02-01 10:00:00"),
+                "date_retour" => NULL,
+            ],
+        ];
+
+        foreach($empruntDatas as $empruntData){
+            $emprunt = new Emprunt;
+
+            $emprunt->setDateEmprunt($empruntData["date_emprunt"]);
+            $emprunt->setDateRetour($empruntData["date_retour"]);
+
+            $manager->persist($emprunt);
         }
     }
 }
