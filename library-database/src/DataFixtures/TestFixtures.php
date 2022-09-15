@@ -145,7 +145,7 @@ class TestFixtures extends Fixture
         for($i=0;$i<1000;$i++){
             $livre = new Livre();
 
-            $livre->setTitre($faker->word(2));
+            $livre->setTitre($faker->words(5, true));
             $livre->setAnneeEdition(random_int(1200, 2022));
             $livre->setNombrePages(random_int(10, 1675));
             $livre->setCodeIsbn($faker->isbn13());
