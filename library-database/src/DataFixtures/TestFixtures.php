@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Livre;
+use App\Entity\Genre;
 use App\Entity\Emprunteur;
 use App\Entity\User;
 use DateTimeImmutable;
@@ -25,6 +26,7 @@ class TestFixtures extends Fixture
         $this->loadUsers($manager, $faker);
         $this->loadEmprunteur($manager, $faker);
         $this->loadLivre($manager, $faker);
+        $this->loadGenre($manager, $faker);
         $manager->flush();
     }
 
@@ -151,6 +153,76 @@ class TestFixtures extends Fixture
             $livre->setCodeIsbn($faker->isbn13());
 
             $manager->persist($livre);
+        }
+    }
+
+    // Create Genre
+
+    public function loadGenre(ObjectManager $manager, FakerGenerator $faker): void
+    {
+        // Possibilité de ne pas préciser "description NULL" mais je le fait car au moins c'est déjà là et + simple à remplacer par des données par la suite
+        $genreDatas = [
+            [
+                "nom" => "poésie",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "nouvelle",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "roman historique",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "roman d'amour",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "roman d'aventure",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "science-fiction",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "fantasy",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "biographie",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "conte",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "témoignage",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "théâtre",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "essai",
+                "description" => NULL,
+            ],
+            [
+                "nom" => "journal intime",
+                "description" => NULL,
+            ],
+        ];
+
+        foreach($genreDatas as $genreData){
+            $genre = new Genre();
+
+            $genre->setNom($genreData["nom"]);
+            $genre->setDescription($genreData["description"]);
+
+            $manager->persist($genre);
         }
     }
 
