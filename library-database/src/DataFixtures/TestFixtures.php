@@ -22,7 +22,7 @@ class TestFixtures extends Fixture
     {
         $faker = FakerFactory::create("fr_FR");
         $this->loadUsers($manager, $faker);
-        $this->laodEmprunteur($manager, $faker);
+        $this->loadEmprunteur($manager, $faker);
         $manager->flush();
     }
 
@@ -97,7 +97,7 @@ class TestFixtures extends Fixture
         }
     }
 
-    public function laodEmprunteur(ObjectManager $manager): void{
+    public function loadEmprunteur(ObjectManager $manager): void{
         $repository = $this->doctrine->getRepository(User::class);
         $users = $repository->findAll();
 
@@ -109,7 +109,6 @@ class TestFixtures extends Fixture
                 "actif" => true,
                 "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-01-01 10:00:00'),
                 "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-01-01 10:00:00'),
-                "user_id" => $users[1]
             ],
             [
                 "nom" => "bar",
@@ -118,7 +117,6 @@ class TestFixtures extends Fixture
                 "actif" => false,
                 "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-02-01 11:00:00'),
                 "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-05-01 12:00:00'),
-                "user_id" => $users[2]
             ],
             [
                 "nom" => "foo",
@@ -127,7 +125,6 @@ class TestFixtures extends Fixture
                 "actif" => true,
                 "created_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-03-01 12:00:00'),
                 "updated_at" => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-03-01 12:00:00'),
-                "user_id" => $users[3]
             ]
         ];
 
@@ -139,7 +136,6 @@ class TestFixtures extends Fixture
             $emprunteur->setActif($emprunteurData["actif"]);
             $emprunteur->setCreatedAt($emprunteurData["created_at"]);
             $emprunteur->setUpdatedAt($emprunteurData["updated_at"]);
-            $emprunteur->setUser($emprunteurData["user_id"]);
 
             $manager->persist($emprunteur);
         }
