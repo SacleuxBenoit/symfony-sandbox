@@ -102,7 +102,7 @@ class TestFixtures extends Fixture
 
     // Create Livre
 
-    public function loadLivre(ObjectManager $manager, FakerGenerator $fater): void
+    public function loadLivre(ObjectManager $manager, FakerGenerator $faker): void
     {
         $livreDatas = [
             [
@@ -138,6 +138,17 @@ class TestFixtures extends Fixture
             $livre->setAnneeEdition($livreData["annee_edition"]);
             $livre->setNombrePages($livreData["nombre_pages"]);
             $livre->setCodeIsbn($livreData["code_isbn"]);
+
+            $manager->persist($livre);
+        }
+
+        for($i=0;$i<1000;$i++){
+            $livre = new Livre();
+
+            $livre->setTitre($faker->word(2));
+            $livre->setAnneeEdition(random_int(1200, 2022));
+            $livre->setNombrePages(random_int(10, 1675));
+            $livre->setCodeIsbn($faker->isbn13());
 
             $manager->persist($livre);
         }
