@@ -293,6 +293,7 @@ class TestFixtures extends Fixture
         }
     }
 
+    // Create Emprunt
     function loadEmprunt(ObjectManager $manager, FakerGenerator $faker): void
     {
         $empruntDatas = [
@@ -315,6 +316,21 @@ class TestFixtures extends Fixture
 
             $emprunt->setDateEmprunt($empruntData["date_emprunt"]);
             $emprunt->setDateRetour($empruntData["date_retour"]);
+
+            $manager->persist($emprunt);
+        }
+
+        for($i=0;$i<200;$i++){
+            $emprunt = new Emprunt;
+
+            // date for created_at
+            $date = $faker->dateTimeBetween('-6 month', '+6 month');
+            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2022-{$date->format('m-d H:i:s')}");
+            $emprunt->setDateEmprunt($date);
+            // date for updated_at
+            $date = $faker->dateTimeBetween('-6 month', '+6 month');
+            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2022-{$date->format('m-d H:i:s')}");
+            $emprunt->setDateRetour($date);
 
             $manager->persist($emprunt);
         }
