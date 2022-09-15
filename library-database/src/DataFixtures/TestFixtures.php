@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Emprunt;
+use App\Entity\Livre;
 use App\Entity\Emprunteur;
 use App\Entity\User;
 use DateTimeImmutable;
@@ -24,6 +24,7 @@ class TestFixtures extends Fixture
         $faker = FakerFactory::create("fr_FR");
         $this->loadUsers($manager, $faker);
         $this->loadEmprunteur($manager, $faker);
+        $this->loadLivre($manager, $faker);
         $manager->flush();
     }
 
@@ -99,8 +100,52 @@ class TestFixtures extends Fixture
         }
     }
 
+    // Create Livre
+
+    public function loadLivre(ObjectManager $manager, FakerGenerator $fater): void
+    {
+        $livreDatas = [
+            [
+                "titre" => "Lorem ipsum dolor sit amet",
+                "annee_edition" => "2010",
+                "nombre_pages" => "100",
+                "code_isbn" => "9785786930024"
+            ],
+            [
+                "titre" => "Consectetur adipiscing elit",
+                "annee_edition" => "2011",
+                "nombre_pages" => "150",
+                "code_isbn" => "9783817260935"
+            ],
+            [
+                "titre" => "Mihi quidem Antiochum",
+                "annee_edition" => "2012",
+                "nombre_pages" => "200",
+                "code_isbn" => "9782020493727"
+            ],
+            [
+                "titre" => "Quem audis satis belle",
+                "annee_edition" => "2013",
+                "nombre_pages" => "250",
+                "code_isbn" => "9794059561353"
+            ]
+        ];
+
+        foreach($livreDatas as $livreData){
+            $livre = new Livre();
+            
+            $livre->setTitre($livreData["titre"]);
+            $livre->setAnneeEdition($livreData["annee_edition"]);
+            $livre->setNombrePages($livreData["nombre_pages"]);
+            $livre->setCodeIsbn($livreData["code_isbn"]);
+
+            $manager->persist($livre);
+        }
+    }
+
     // Create Emprunteur
-    public function loadEmprunteur(ObjectManager $manager, FakerGenerator $faker): void{
+    public function loadEmprunteur(ObjectManager $manager, FakerGenerator $faker): void
+    {
         $repository = $this->doctrine->getRepository(User::class);
         $users = $repository->findAll();
 
