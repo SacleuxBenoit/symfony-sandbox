@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Emprunt;
 use App\Entity\Emprunteur;
 use App\Entity\User;
 use DateTimeImmutable;
@@ -26,6 +27,7 @@ class TestFixtures extends Fixture
         $manager->flush();
     }
 
+    // Create users
     public function loadUsers(ObjectManager $manager, FakerGenerator $faker): void
     {
         $userDatas = [
@@ -97,7 +99,8 @@ class TestFixtures extends Fixture
         }
     }
 
-    public function loadEmprunteur(ObjectManager $manager): void{
+    // Create Emprunteur
+    public function loadEmprunteur(ObjectManager $manager, FakerGenerator $faker): void{
         $repository = $this->doctrine->getRepository(User::class);
         $users = $repository->findAll();
 
@@ -136,6 +139,25 @@ class TestFixtures extends Fixture
             $emprunteur->setActif($emprunteurData["actif"]);
             $emprunteur->setCreatedAt($emprunteurData["created_at"]);
             $emprunteur->setUpdatedAt($emprunteurData["updated_at"]);
+
+            $manager->persist($emprunteur);
+        }
+
+        for($i=0;$i<100;$i++){
+            $emprunteur = new Emprunteur();
+
+            $emprunteur->setNom($faker->lastName());
+            $emprunteur->setPrenom($faker->firstName());
+            $emprunteur->setTel($faker->phoneNumber());
+            $emprunteur->setActif($faker->boolean());
+            // date for created_at
+            $date = $faker->dateTimeBetween('-6 month', '+6 month');
+            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2022-{$date->format('m-d H:i:s')}");
+            $emprunteur->setCreatedAt($date);
+            // date for updated_at
+            $date = $faker->dateTimeBetween('-6 month', '+6 month');
+            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', "2022-{$date->format('m-d H:i:s')}");
+            $emprunteur->setUpdatedAt($date);
 
             $manager->persist($emprunteur);
         }
