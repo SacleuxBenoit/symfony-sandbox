@@ -2,11 +2,14 @@
 
 namespace App\DataFixtures;
 
+// import entity
+use App\Entity\Auteur;
 use App\Entity\Emprunt;
 use App\Entity\Livre;
 use App\Entity\Genre;
 use App\Entity\Emprunteur;
 use App\Entity\User;
+
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -24,6 +27,7 @@ class TestFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = FakerFactory::create("fr_FR");
+        $this->loadAuteur($manager, $faker);
         $this->loadUsers($manager, $faker);
         $this->loadLivre($manager, $faker);
         $this->loadGenre($manager, $faker);
@@ -333,6 +337,45 @@ class TestFixtures extends Fixture
             $emprunt->setDateRetour($date);
 
             $manager->persist($emprunt);
+        }
+    }
+
+    public function loadAuteur(ObjectManager $manager, FakerGenerator $faker){
+        $auteurDatas = [
+            [
+                "nom" => "auteur inconnu",
+                "prenom" => "",
+            ],
+            [
+                "nom" => "Cartier",
+                "prenom" => "Hugues",
+            ],
+            [
+                "nom" => "Lambert",
+                "prenom" => "Armand",
+            ],
+            [
+                "nom" => "Moitessier",
+                "prenom" => "Thomas",
+            ]
+        ];
+
+        foreach($auteurDatas as $auteurData){
+            $auteur = new Auteur();
+
+            $auteur->setNom($auteurData["nom"]);
+            $auteur->setPrenom($auteurData["prenom"]);
+
+            $manager->persist($auteur);
+        }
+
+        for($i=0;$i<500;$i++){
+            $auteur = new Auteur();
+
+            $auteur->setNom($faker->lastName);
+            $auteur->setPrenom($faker->firstName);
+
+            $manager->persist(($auteur));
         }
     }
 }
